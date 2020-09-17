@@ -1,0 +1,81 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+
+#define VELIKOST 10
+
+void naplnPole(int pole[], int velikost) {
+	//int len = sizeof(&pole) / sizeof(pole[0]);
+	for (int i = 0; i < VELIKOST; i++) {
+		pole[i] = rand() %10 + 1;
+	}
+	return;
+}
+
+void vypisPole(int pole[], int velikost) {
+	//int len = sizeof(&pole) / sizeof(pole[0]);
+	for (int i = 0; i < velikost; i++) {
+		std::cout << pole[i] << " ";
+	}
+	return;
+}
+
+void swap(int* xp, int* yp){
+	int temp = *xp;
+	*xp = *yp;
+	*yp = temp;
+}
+
+// A function to implement bubble sort  
+void setridPole(int pole[], int n){
+	int i, j;
+	for (i = 0; i < n - 1; i++)
+		// Last i elements are already in place  
+		for (j = 0; j < n - i - 1; j++)
+			if (pole[j] > pole[j + 1])
+				swap(&pole[j], &pole[j + 1]);
+}
+
+void zapisDoSouboru(int pole[], int velikost) {
+	std::ofstream myfile("zapis.txt");
+	if (myfile.is_open()){
+		for (int i = 0; i < velikost; i++) {
+			myfile << pole[i] << " ";
+		}
+		myfile.close();
+	}
+	else std::cout << "Unable to open file";
+}
+
+void ctiPole(int pole[], int velikost) {
+	std::ifstream myfile("nacteni.txt");
+	if (myfile.is_open()){
+		for (int i = 0; i < velikost; i++)
+		{
+			myfile >> pole[i];
+		}
+		myfile.close(); 
+	}
+	else { 
+		std::cout << "Can't find input file " << std::endl;
+	}
+}
+
+int main(){
+
+	srand(time(NULL));
+
+	int pole[VELIKOST];
+	int poleNactene[VELIKOST];
+
+	ctiPole(pole, VELIKOST);
+	vypisPole(pole, VELIKOST);
+	setridPole(pole, VELIKOST);
+	std::cout << std::endl;
+	vypisPole(pole, VELIKOST);
+	zapisDoSouboru(pole, VELIKOST);
+	return 0;
+}
